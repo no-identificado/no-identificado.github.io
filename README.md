@@ -19,7 +19,8 @@
       background-color: yellow;
       pointer-events: none;
     }
-    #buttonPanel { background-color: #34495e;
+    #buttonPanel {
+      background-color: #34495e;
       padding: 10px;
       color: white;
       display: flex;
@@ -27,7 +28,8 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
-    #buttonPanel button { background-color: #5d6d7e;
+    #buttonPanel button {
+      background-color: #5d6d7e;
       color: white;
       border: none;
       padding: 10px;
@@ -35,7 +37,8 @@
       transition: background-color 0.3s;
       border-radius: 4px;
     }
-    #buttonPanel button:hover { background-color: #85a5cc;
+    #buttonPanel button:hover {
+      background-color: #85a5cc;
     }
     #buttonPanel label {
       margin-right: 5px;
@@ -46,7 +49,14 @@
     #buttonPanel select {
       margin-right: 10px;
     }
-    #title { margin-top: 20px; font-size: 32px; font-weight: bold; text-align: center; font-family: 'Georgia', serif; color: #1c2833; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    #title {
+      margin-top: 20px;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+      font-family: 'Georgia', serif;
+      color: #1c2833;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     }
     #truckTable {
       margin-top: 20px;
@@ -56,18 +66,21 @@
       margin-right: auto;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     }
-    #truckTable th { background-color: #f39c12;
+    #truckTable th {
+      background-color: #f39c12;
       color: white;
       padding: 15px;
       text-align: center;
       border: 1px solid #ddd;
     }
-    #truckTable td { background-color: #fce5cd;
+    #truckTable td {
+      background-color: #fce5cd;
       border: 1px solid #ddd;
       text-align: center;
       padding: 10px;
     }
-    #truckTable tr:nth-child(even) { background-color: #f8c471;
+    #truckTable tr:nth-child(even) {
+      background-color: #f8c471;
     }
   </style>
 </head>
@@ -186,13 +199,13 @@
       movementActive = true;
       index = 0;
       moveSquare();
-      updateInterval = setInterval(updateTable, 1000); // Start updating the table every second
+      updateInterval = setInterval(updateTable, 1000);
     }
 
     function moveSquare() {
       if (!movementActive) return;
       if (index >= path.length) {
-        index = 0; // Reinicia el movimiento cuando llegue al final del camino
+        index = 0;
       }
       if (path[index]) {
         yellowSquare.style.left = path[index].x + 'px';
@@ -204,7 +217,7 @@
 
     function stopMovement() {
       movementActive = false;
-      clearInterval(updateInterval); // Stop updating the table
+      clearInterval(updateInterval);
       cancelAnimationFrame(animationFrameId);
     }
 
@@ -213,20 +226,18 @@
       path = [];
       index = 0;
       movementActive = false;
-      clearInterval(updateInterval); // Stop updating the table
+      clearInterval(updateInterval);
       cancelAnimationFrame(animationFrameId);
     }
 
     function updateTable() {
-      // Update fuel, speed, and tonnage randomly within specified ranges
       fuel = Math.max(30, Math.min(70, fuel + (Math.random() * 2 - 1)));
       speed = Math.max(20, Math.min(50, speed + (Math.random() * 4 - 2)) * speedControl.value / 5);
       tonnage = Math.max(30, Math.min(40, tonnage + (Math.random() * 2 - 1)));
 
-      // Update the HTML table with new values
-      document.getElementById('fuel').textContent = fuel.toFixed(2);
-      document.getElementById('speed').textContent = speed.toFixed(2);
-      document.getElementById('tonnage').textContent = tonnage.toFixed(2);
+      document.getElementById('fuel').innerText = fuel.toFixed(1);
+      document.getElementById('speed').innerText = speed.toFixed(1);
+      document.getElementById('tonnage').innerText = tonnage.toFixed(1);
     }
 
     function calculateHaulage() {
@@ -238,19 +249,13 @@
       const loadedSpeed2 = parseFloat(document.getElementById('loadedSpeed2').value);
       const truckCapacity = parseFloat(document.getElementById('truckCapacity').value);
 
-      if (isNaN(distance1) || isNaN(emptySpeed1) || isNaN(loadedSpeed1) || isNaN(distance2) || isNaN(emptySpeed2) || isNaN(loadedSpeed2) || isNaN(truckCapacity)) {
-        document.getElementById('result').innerHTML = "Por favor, ingrese todos los valores correctamente.";
-        return;
-      }
+      const totalDistance = distance1 + distance2;
+      const avgSpeed = (emptySpeed1 + loadedSpeed1 + emptySpeed2 + loadedSpeed2) / 4;
+      const haulageTime = totalDistance / avgSpeed;
+      const cycleHaulage = haulageTime * truckCapacity;
 
-      const timeEmpty1 = distance1 / emptySpeed1;
-      const timeLoaded1 = distance1 / loadedSpeed1;
-      const timeEmpty2 = distance2 / emptySpeed2;
-      const timeLoaded2 = distance2 / loadedSpeed2;
-      const totalTime = timeEmpty1 + timeLoaded1 + timeEmpty2 + timeLoaded2;
-      const materialTransported = truckCapacity;
-
-      document.getElementById('result').innerHTML = `<strong>Tiempo total:</strong> ${totalTime.toFixed(2)} horas <br> <strong>Material transportado:</strong> ${materialTransported.toFixed(2)} toneladas`;
+      document.getElementById('result').innerText = 
+        `Tiempo de acarreo: ${haulageTime.toFixed(2)} horas\nCapacidad del ciclo: ${cycleHaulage.toFixed(2)} toneladas`;
     }
   </script>
 </body>
